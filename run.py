@@ -108,6 +108,7 @@ if __name__ == "__main__":
     cmd_group = parser.add_mutually_exclusive_group(required=True)
     cmd_group.add_argument("--train", action="store_true", help="Run training")
     cmd_group.add_argument("--validate", action="store_true", help="Run validation")
+    parser.add_argument("--training-data", help="Path to training data")
     parser.add_argument("--model-state-dict", help="Path to model state dict")
     args = parser.parse_args()
 
@@ -120,7 +121,7 @@ if __name__ == "__main__":
 
     if args.train:
         train(
-            training_data_path="/bask/projects/v/vjgo8416-climate/shared/data/eumetsat/training/2022_training_nonhrv.zarr",
+            training_data_path=args.training_data,
             batch_size=5,
             history_steps=96,
             forecast_steps=1,
