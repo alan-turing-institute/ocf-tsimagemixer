@@ -1,0 +1,12 @@
+[project]
+name = "ocf-tsimagemixer"
+authors = [
+    {name = "Alan Turing Institute", email = "clouds@turing.ac.uk"},
+]
+version = "0.1.0"
+description = "Implementation of TSImageMixer."
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "cloudcasting @ git+https://github.com/alan-turing-institute/cloudcasting.git@v0.4.0",
+]

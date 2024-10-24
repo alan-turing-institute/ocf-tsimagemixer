@@ -1,0 +1,5 @@
+# Changes here will be overwritten by Copier
+_commit: 8170eb2
+_src_path: gh:alan-turing-institute/ocf-model-template
+model_name: TSImageMixer
+repo_name: ocf-tsimagemixer
