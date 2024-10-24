@@ -112,7 +112,8 @@ if __name__ == "__main__":
     cmd_group = parser.add_mutually_exclusive_group(required=True)
     cmd_group.add_argument("--train", action="store_true", help="Run training")
     cmd_group.add_argument("--validate", action="store_true", help="Run validation")
-    parser.add_argument("--batch-size", type=int, help="Batch size", default=1)
+    parser.add_argument("--batch-size", type=int, help="Batch size", default=2)
+    parser.add_argument("--num-history-steps", type=int, help="History steps", default=24)
     parser.add_argument("--num-epochs", type=int, help="Number of epochs", default=10)
     parser.add_argument("--model-state-dict", type=str, help="Path to model state dict")
     parser.add_argument("--training-data", type=str, help="Path to training data")
@@ -129,7 +130,7 @@ if __name__ == "__main__":
         train(
             training_data_path=args.training_data,
             batch_size=args.batch_size,
-            history_steps=96,
+            history_steps=args.num_history_steps,
             forecast_steps=1,
             num_epochs=args.num_epochs,
             device=device,
