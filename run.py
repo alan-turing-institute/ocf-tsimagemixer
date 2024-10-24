@@ -72,6 +72,7 @@ def train(
     # Training loop
     best_loss = 999
     best_model = None
+    save_model = False
     for epoch in range(num_epochs):
         # Set model to training mode
         model.train()
@@ -93,14 +94,17 @@ def train(
             if loss.item() < best_loss:
                 best_loss = loss.item()
                 best_model = model
+                save_model = True
 
         print(
             f"Epoch [{epoch+1}/{num_epochs}], Loss: {loss.item():.4f}, Best loss {best_loss:.4f}"
         )
-        torch.save(
-            best_model.state_dict(),
-            f"models/best-model-epoch-{epoch}-loss-{best_loss:.3g}.state-dict.pt",
-        )
+        if save_model:
+            torch.save(
+                best_model.state_dict(),
+                f"models/best-model-epoch-{epoch}-loss-{best_loss:.3g}.state-dict.pt",
+            )
+            save_model = False
 
 
 if __name__ == "__main__":
@@ -108,8 +112,10 @@ if __name__ == "__main__":
     cmd_group = parser.add_mutually_exclusive_group(required=True)
     cmd_group.add_argument("--train", action="store_true", help="Run training")
     cmd_group.add_argument("--validate", action="store_true", help="Run validation")
-    parser.add_argument("--training-data", help="Path to training data")
-    parser.add_argument("--model-state-dict", help="Path to model state dict")
+    parser.add_argument("--batch-size", type=int, help="Batch size", default=1)
+    parser.add_argument("--num-epochs", type=int, help="Number of epochs", default=10)
+    parser.add_argument("--model-state-dict", type=str, help="Path to model state dict")
+    parser.add_argument("--training-data", type=str, help="Path to training data")
     args = parser.parse_args()
 
     # Get the appropriate PyTorch device
@@ -122,10 +128,10 @@ if __name__ == "__main__":
     if args.train:
         train(
             training_data_path=args.training_data,
-            batch_size=5,
+            batch_size=args.batch_size,
             history_steps=96,
             forecast_steps=1,
-            num_epochs=10,
+            num_epochs=args.num_epochs,
             device=device,
         )
     if args.validate:
