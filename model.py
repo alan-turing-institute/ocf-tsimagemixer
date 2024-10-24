@@ -1,5 +1,7 @@
 from cloudcasting.models import AbstractModel
+
 import ocf_tsimagemixer
+
 
 # We define a new class that inherits from AbstractModel
 class TSImageMixer(AbstractModel):
@@ -13,7 +15,6 @@ class TSImageMixer(AbstractModel):
         # any other parameters (replace `example_parameter` with as many other parameters as you need to initialize your model, and also add them to `validate_config.yml` under `model: params`)
         super().__init__(history_steps)
 
-
         ###### YOUR CODE HERE ######
         # Here you can add any other parameters that you need to initialize your model
         # You might load your trained ML model or set up an optical flow method here.
@@ -22,14 +23,12 @@ class TSImageMixer(AbstractModel):
 
         ############################
 
-
     def forward(self, X):
         # This is where you will make predictions with your model
         # The input X is a numpy array with shape (batch_size, channels, time, height, width)
 
         ###### YOUR CODE HERE ######
         ...
-
 
     def hyperparameters_dict(self):
 
@@ -38,4 +37,3 @@ class TSImageMixer(AbstractModel):
 
         ###### YOUR CODE HERE ######
         ...
-      
