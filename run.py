@@ -32,6 +32,11 @@ def train(
     device: str,
     num_workers: int = 0,
 ) -> None:
+    # Batch size must be greater than 1
+    if batch_size < 2:
+        print("Batch size must be 2 or greater")
+        return
+
     # Load the training dataset
     dataset = SatelliteDataset(
         zarr_path=training_data_path,
@@ -78,6 +83,11 @@ def train(
         model.train()
 
         for X, y in tqdm.tqdm(train_dataloader):
+            # All batches must be the same size
+            if X.shape[0] != batch_size:
+                print(f"Skipping batch with size {X.shape[0]}")
+                continue
+
             # Zero the parameter gradients
             optimizer.zero_grad()
 
