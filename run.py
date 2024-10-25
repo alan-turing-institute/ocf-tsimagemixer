@@ -1,4 +1,5 @@
 import argparse
+import pathlib
 import random
 
 import numpy as np
@@ -24,12 +25,13 @@ def seed_worker(worker_id):
 
 
 def train(
-    training_data_path: str,
     batch_size: int,
-    history_steps: int,
-    forecast_steps: int,
-    num_epochs: int,
     device: str,
+    forecast_steps: int,
+    history_steps: int,
+    num_epochs: int,
+    output_directory: pathlib.Path,
+    training_data_path: str,
     num_workers: int = 0,
 ) -> None:
     # Batch size must be greater than 1
@@ -110,9 +112,10 @@ def train(
             f"Epoch [{epoch+1}/{num_epochs}], Loss: {loss.item():.4f}, Best loss {best_loss:.4f}"
         )
         if save_model:
+            output_directory.mkdir(parents=True, exist_ok=True)
             torch.save(
                 best_model.state_dict(),
-                f"models/best-model-epoch-{epoch}-loss-{best_loss:.3g}.state-dict.pt",
+                output_directory / "best-model-epoch-{epoch}-loss-{best_loss:.3g}.state-dict.pt",
             )
             save_model = False
 
@@ -126,6 +129,7 @@ if __name__ == "__main__":
     parser.add_argument("--num-history-steps", type=int, help="History steps", default=24)
     parser.add_argument("--num-epochs", type=int, help="Number of epochs", default=10)
     parser.add_argument("--model-state-dict", type=str, help="Path to model state dict")
+    parser.add_argument("--output-directory", type=str, help="Path to save outputs to")
     parser.add_argument("--training-data", type=str, help="Path to training data")
     args = parser.parse_args()
 
@@ -138,12 +142,13 @@ if __name__ == "__main__":
 
     if args.train:
         train(
-            training_data_path=args.training_data,
             batch_size=args.batch_size,
-            history_steps=args.num_history_steps,
-            forecast_steps=1,
-            num_epochs=args.num_epochs,
             device=device,
+            forecast_steps=1,
+            history_steps=args.num_history_steps,
+            num_epochs=args.num_epochs,
+            output_directory=pathlib.Path(args.output_directory),
+            training_data_path=args.training_data,
         )
     if args.validate:
         print("validate")
